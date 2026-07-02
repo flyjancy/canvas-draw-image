@@ -15,6 +15,14 @@ Restart Codex so the skill list is refreshed.
 
 ## Configure
 
+On first use, if no API key is found and the script is running in an interactive terminal, it will guide you through setup and save the result to `~/.canvas-draw-image.env`.
+
+You can also run setup explicitly:
+
+```bash
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup
+```
+
 Set at least:
 
 - `CANVAS_API_KEY`: your API key
@@ -29,6 +37,8 @@ Optional variables:
 - `CANVAS_OUTPUT_DIR`, default `output/drawings`
 
 Do not commit API keys. `.env` and `.canvas-draw-image.env` are ignored by Git.
+
+The setup file is written with `600` permissions. In non-interactive environments, create `~/.canvas-draw-image.env` manually or pass `--api-key` and `--base-url`.
 
 ### Portable config file
 

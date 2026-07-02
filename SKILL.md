@@ -22,7 +22,15 @@ The script reads configuration in this order:
 - Config files: `./.canvas-draw-image.env`, `./.env`, `~/.canvas-draw-image.env`, or `~/.env`
 - Shell profiles for bash, zsh, fish, POSIX profile, and PowerShell profile files
 
-Do not print API keys. Prefer relying on the configured environment/profile.
+If `CANVAS_API_KEY` is missing in an interactive terminal, the script prompts for API key, Base URL, and model, then saves them to `~/.canvas-draw-image.env` with `600` permissions. In non-interactive runs, it prints setup instructions and exits.
+
+Do not print API keys. Prefer relying on the configured environment/profile or the first-run setup file.
+
+Explicit setup:
+
+```bash
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup
+```
 
 ## Common Tasks
 

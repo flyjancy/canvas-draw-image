@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import getpass
 import json
 import mimetypes
 import os
@@ -43,6 +44,7 @@ DEFAULT_BASE_URL = "https://api.openai.com"
 DEFAULT_MODEL = "gpt-image-2"
 DEFAULT_OUTPUT_FORMAT = "png"
 DEFAULT_USER_AGENT = "curl/8.7.1"
+USER_CONFIG_FILE = Path.home() / ".canvas-draw-image.env"
 CONFIG_FILE_NAMES = (".canvas-draw-image.env", ".env")
 PROFILE_FILE_NAMES = (
     ".zshrc",
@@ -143,6 +145,84 @@ def parse_powershell_assignment(line: str, name: str) -> str | None:
     if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
         return value[1:-1] or None
     return value or None
+
+
+def setup_config(args: argparse.Namespace, *, require_missing: bool = False) -> None:
+    if not sys.stdin.isatty():
+        raise ImageApiError(
+            "Missing image API configuration. Run this once in a terminal:\n"
+            "  python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup\n"
+            "or create ~/.canvas-draw-image.env with CANVAS_API_KEY and CANVAS_BASE_URL."
+        )
+
+    print("First-time Canvas Draw Image setup")
+    print(f"Config will be saved to: {USER_CONFIG_FILE}")
+    api_key = prompt_secret("API key", args.api_key, required=True)
+    base_url = prompt_text("Base URL", args.base_url or DEFAULT_BASE_URL, required=True)
+    model = prompt_text("Image model", args.model or DEFAULT_MODEL, required=True)
+    write_user_config(
+        {
+            "CANVAS_API_KEY": api_key,
+            "CANVAS_BASE_URL": base_url.rstrip("/"),
+            "CANVAS_IMAGE_MODEL": model,
+        }
+    )
+    args.api_key = api_key
+    args.base_url = base_url.rstrip("/")
+    args.model = model
+    if require_missing:
+        print("Configuration saved. Continuing with the current request.")
+    else:
+        print("Configuration saved.")
+
+
+def prompt_secret(label: str, current: str | None, *, required: bool) -> str:
+    suffix = " [press Enter to keep existing]" if current else ""
+    while True:
+        value = getpass.getpass(f"{label}{suffix}: ").strip()
+        if value:
+            return value
+        if current:
+            return current
+        if not required:
+            return ""
+        print(f"{label} is required.")
+
+
+def prompt_text(label: str, current: str | None, *, required: bool) -> str:
+    default = current or ""
+    suffix = f" [{default}]" if default else ""
+    while True:
+        value = input(f"{label}{suffix}: ").strip() or default
+        if value:
+            return value
+        if not required:
+            return ""
+        print(f"{label} is required.")
+
+
+def write_user_config(updates: dict[str, str]) -> None:
+    USER_CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    lines = USER_CONFIG_FILE.read_text(errors="ignore").splitlines() if USER_CONFIG_FILE.exists() else []
+    pending = dict(updates)
+    next_lines: list[str] = []
+    assignment = re.compile(r"^\s*(?:export\s+)?([A-Z0-9_]+)=")
+    for line in lines:
+        match = assignment.match(line)
+        key = match.group(1) if match else ""
+        if key in pending:
+            next_lines.append(format_env_assignment(key, pending.pop(key)))
+        else:
+            next_lines.append(line)
+    if next_lines and next_lines[-1].strip():
+        next_lines.append("")
+    next_lines.extend(format_env_assignment(key, value) for key, value in pending.items())
+    USER_CONFIG_FILE.write_text("\n".join(next_lines).rstrip() + "\n")
+    USER_CONFIG_FILE.chmod(0o600)
+
+
+def format_env_assignment(key: str, value: str) -> str:
+    return f"{key}={shlex.quote(value)}"
 
 
 def normalize_quality(value: str) -> str | None:
@@ -499,6 +579,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate or edit images through an OpenAI-compatible image API.")
     parser.add_argument("prompt_arg", nargs="*", help="Prompt text. If omitted, enter interactive mode.")
     parser.add_argument("-p", "--prompt", help="Prompt text. Overrides positional prompt.")
+    parser.add_argument("--setup", action="store_true", help="Prompt for API key, base URL, and model, then save them to ~/.canvas-draw-image.env.")
     parser.add_argument("--api-key", default=env_value("CANVAS_API_KEY") or env_value("OPENAI_API_KEY"), help="API key. Defaults to CANVAS_API_KEY or OPENAI_API_KEY.")
     parser.add_argument("--base-url", default=env_value("CANVAS_BASE_URL") or env_value("OPENAI_BASE_URL") or DEFAULT_BASE_URL, help="API base URL.")
     parser.add_argument("--model", default=env_value("CANVAS_IMAGE_MODEL", DEFAULT_MODEL), help="Image model name.")
@@ -514,15 +595,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--insecure", action="store_true", help="Disable TLS verification. Use only for diagnosing broken local certificates.")
     args = parser.parse_args()
     args.count = max(1, min(15, abs(args.count)))
-    if not args.api_key:
-        parser.error("Missing API key. Set CANVAS_API_KEY or pass --api-key.")
     return args
 
 
 def main() -> int:
     args = parse_args()
+    if args.setup:
+        setup_config(args)
+        if not args.prompt and not args.prompt_arg:
+            return 0
     prompt = args.prompt or " ".join(args.prompt_arg).strip()
     prompts = [prompt] if prompt else []
+    if not args.api_key:
+        try:
+            setup_config(args, require_missing=True)
+        except ImageApiError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 2
 
     if not prompts:
         print("Interactive mode. Existing --reference files apply to every prompt.")
