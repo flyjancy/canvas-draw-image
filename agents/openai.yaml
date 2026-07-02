@@ -1,0 +1,4 @@
+interface:
+  display_name: "Canvas Draw Image"
+  short_description: "通过本地 Python 脚本调用画布生图接口并保存图片文件"
+  default_prompt: "Use $canvas-draw-image to generate an image from a prompt and save it locally."

@@ -1,0 +1,6 @@
+.env
+.canvas-draw-image.env
+output/
+__pycache__/
+*.py[cod]
+.DS_Store
