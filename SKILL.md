@@ -9,10 +9,12 @@ Use the bundled script for deterministic image generation through the user's Ope
 
 ## Script
 
+Use `gpt-image-2.5-flare` by default and when the user requests “gpt-image 2.5”. Pass `--model gpt-image-2.5-flare` explicitly; if the user specifies another exact model ID, use that instead.
+
 Run:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py "prompt text"
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-flare "prompt text"
 ```
 
 The script reads configuration in this order:
@@ -37,31 +39,31 @@ python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup
 Generate one image:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --count 1 --size 1:1 "一只白色机械猫，赛博朋克风格"
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-flare --count 1 --size 1:1 "一只白色机械猫，赛博朋克风格"
 ```
 
 Generate multiple images:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --count 3 --size 16:9 "雨夜里的未来城市街景"
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-flare --count 3 --size 16:9 "雨夜里的未来城市街景"
 ```
 
 Use a reference image for image editing:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --reference /path/to/reference.png "把参考图改成水彩插画风格"
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-flare --reference /path/to/reference.png "把参考图改成水彩插画风格"
 ```
 
 Use a mask for local edits:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --reference /path/to/source.png --mask /path/to/mask.png "只修改透明蒙版区域"
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-flare --reference /path/to/source.png --mask /path/to/mask.png "只修改透明蒙版区域"
 ```
 
 Interactive mode:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py
+python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-flare
 ```
 
 ## Output
