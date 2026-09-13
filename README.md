@@ -30,7 +30,7 @@ Set at least:
 
 Optional variables:
 
-- `CANVAS_IMAGE_MODEL`, default `gpt-image-2`
+- `CANVAS_IMAGE_MODEL`, default `gpt-image-2.5-flare`
 - `CANVAS_IMAGE_SIZE`, default `1:1`
 - `CANVAS_IMAGE_QUALITY`, default `auto`
 - `CANVAS_IMAGE_COUNT`, default `1`
@@ -48,7 +48,7 @@ Works across shells:
 cat > ~/.canvas-draw-image.env <<'EOF'
 CANVAS_API_KEY="your-api-key"
 CANVAS_BASE_URL="https://example.com/v1"
-CANVAS_IMAGE_MODEL="gpt-image-2"
+CANVAS_IMAGE_MODEL="gpt-image-2.5-flare"
 EOF
 ```
 
@@ -59,7 +59,7 @@ Add to `~/.bashrc`, `~/.bash_profile`, `~/.zshrc`, `~/.zprofile`, or `~/.profile
 ```bash
 export CANVAS_API_KEY="your-api-key"
 export CANVAS_BASE_URL="https://example.com/v1"
-export CANVAS_IMAGE_MODEL="gpt-image-2"
+export CANVAS_IMAGE_MODEL="gpt-image-2.5-flare"
 ```
 
 ### fish
@@ -67,7 +67,7 @@ export CANVAS_IMAGE_MODEL="gpt-image-2"
 ```fish
 set -Ux CANVAS_API_KEY "your-api-key"
 set -Ux CANVAS_BASE_URL "https://example.com/v1"
-set -Ux CANVAS_IMAGE_MODEL "gpt-image-2"
+set -Ux CANVAS_IMAGE_MODEL "gpt-image-2.5-flare"
 ```
 
 ### PowerShell
@@ -75,7 +75,7 @@ set -Ux CANVAS_IMAGE_MODEL "gpt-image-2"
 ```powershell
 [Environment]::SetEnvironmentVariable("CANVAS_API_KEY", "your-api-key", "User")
 [Environment]::SetEnvironmentVariable("CANVAS_BASE_URL", "https://example.com/v1", "User")
-[Environment]::SetEnvironmentVariable("CANVAS_IMAGE_MODEL", "gpt-image-2", "User")
+[Environment]::SetEnvironmentVariable("CANVAS_IMAGE_MODEL", "gpt-image-2.5-flare", "User")
 ```
 
 Restart the terminal after setting persistent environment variables.

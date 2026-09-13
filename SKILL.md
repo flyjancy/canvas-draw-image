@@ -9,7 +9,7 @@ Use the bundled script for deterministic image generation through the user's Ope
 
 ## Script
 
-For `gpt-image-2.5` image generation or reference-image editing, ask the user to choose between `gpt-image-2.5-flare` and `gpt-image-2.5-sunburst` before calling the script when no variant is specified. If the user names either variant, use it directly. If the user provides another complete model ID, use that exact ID.
+The default model is `gpt-image-2.5-flare`, so `--model` can be omitted for `gpt-image-2.5` image generation and reference-image editing. If the user asks for `gpt-image-2.5-sunburst`, pass `--model gpt-image-2.5-sunburst`. If the user provides another complete model ID, use that exact ID.
 
 Run:
 
