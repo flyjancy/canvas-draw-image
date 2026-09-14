@@ -151,7 +151,7 @@ def setup_config(args: argparse.Namespace, *, require_missing: bool = False) -> 
     if not sys.stdin.isatty():
         raise ImageApiError(
             "Missing image API configuration. Run this once in a terminal:\n"
-            "  python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup\n"
+            f"  python3 {Path(__file__).resolve()} --setup\n"
             "or create ~/.canvas-draw-image.env with CANVAS_API_KEY and CANVAS_BASE_URL."
         )
 

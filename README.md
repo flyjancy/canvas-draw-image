@@ -1,17 +1,17 @@
 # Canvas Draw Image Skill
 
-Codex skill for generating or editing images through an OpenAI-compatible image API. It bundles a standalone Python script and does not require the Infinite Canvas web app to be running.
+Pi skill for generating or editing images through an OpenAI-compatible image API. It bundles a standalone Python script and does not require the Infinite Canvas web app to be running. The skill follows the Agent Skills standard, so other harnesses that support it (including Codex) can use the same files.
 
 ## Install
 
-Clone this repository into your Codex skills directory:
+Clone this repository into your Pi skills directory:
 
 ```bash
-mkdir -p ~/.codex/skills
-git clone https://github.com/LinckLin/canvas-draw-image.git ~/.codex/skills/canvas-draw-image
+mkdir -p ~/.pi/agent/skills
+git clone https://github.com/flyjancy/canvas-draw-image.git ~/.pi/agent/skills/canvas-draw-image
 ```
 
-Restart Codex so the skill list is refreshed.
+Restart Pi so the skill list is refreshed.
 
 ## Configure
 
@@ -20,7 +20,7 @@ On first use, if no API key is found and the script is running in an interactive
 You can also run setup explicitly:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup
+python3 ~/.pi/agent/skills/canvas-draw-image/scripts/draw_image.py --setup
 ```
 
 Set at least:
@@ -80,18 +80,18 @@ set -Ux CANVAS_IMAGE_MODEL "gpt-image-2.5-flare"
 
 Restart the terminal after setting persistent environment variables.
 
-## Use With Codex
+## Use With Pi
 
-Ask Codex:
+Ask Pi, or use the skill command:
 
 ```text
-Use $canvas-draw-image to generate an image of a white mechanical cat in a cyberpunk city.
+/skill:canvas-draw-image generate an image of a white mechanical cat in a cyberpunk city
 ```
 
-The skill runs:
+The skill resolves `scripts/draw_image.py` against its own directory and runs:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py "prompt text"
+python3 scripts/draw_image.py "prompt text"
 ```
 
 ## Use Directly
@@ -99,25 +99,25 @@ python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py "prompt text"
 Generate one image:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --count 1 --size 1:1 "a blue circle on a white background"
+python3 ~/.pi/agent/skills/canvas-draw-image/scripts/draw_image.py --count 1 --size 1:1 "a blue circle on a white background"
 ```
 
 Generate multiple images:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --count 3 --size 16:9 "rainy futuristic city street"
+python3 ~/.pi/agent/skills/canvas-draw-image/scripts/draw_image.py --count 3 --size 16:9 "rainy futuristic city street"
 ```
 
 Edit using a reference image:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --reference ./reference.png "turn this into a watercolor illustration"
+python3 ~/.pi/agent/skills/canvas-draw-image/scripts/draw_image.py --reference ./reference.png "turn this into a watercolor illustration"
 ```
 
 Use a mask:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --reference ./source.png --mask ./mask.png "only change the transparent masked area"
+python3 ~/.pi/agent/skills/canvas-draw-image/scripts/draw_image.py --reference ./source.png --mask ./mask.png "only change the transparent masked area"
 ```
 
 ## Output

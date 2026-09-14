@@ -1,6 +1,6 @@
 ---
 name: canvas-draw-image
-description: Generate or edit images from Codex using the bundled standalone Python OpenAI-compatible image script. Use when the user asks Codex to draw, generate an image, create artwork, run the local drawing script, test the configured image API, or perform reference-image edits outside the Infinite Canvas web app.
+description: Generate or edit images using the bundled standalone Python OpenAI-compatible image script. Use when the user asks to draw, generate an image, create artwork, run the local drawing script, test the configured image API, or perform reference-image edits outside the Infinite Canvas web app.
 ---
 
 # Canvas Draw Image
@@ -11,10 +11,10 @@ Use the bundled script for deterministic image generation through the user's Ope
 
 The default model is `gpt-image-2.5-flare`, so `--model` can be omitted for `gpt-image-2.5` image generation and reference-image editing. If the user asks for `gpt-image-2.5-sunburst`, pass `--model gpt-image-2.5-sunburst`. If the user provides another complete model ID, use that exact ID.
 
-Run:
+Run (resolve `scripts/draw_image.py` against this skill's directory before executing):
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model <selected-model> "prompt text"
+python3 scripts/draw_image.py --model <selected-model> "prompt text"
 ```
 
 The script reads configuration in this order:
@@ -31,7 +31,7 @@ Do not print API keys. Prefer relying on the configured environment/profile or t
 Explicit setup:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup
+python3 scripts/draw_image.py --setup
 ```
 
 ## Common Tasks
@@ -39,31 +39,31 @@ python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --setup
 Generate one image:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-flare --count 1 --size 1:1 "一只白色机械猫，赛博朋克风格"
+python3 scripts/draw_image.py --model gpt-image-2.5-flare --count 1 --size 1:1 "一只白色机械猫，赛博朋克风格"
 ```
 
 Generate multiple images:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model gpt-image-2.5-sunburst --count 3 --size 16:9 "雨夜里的未来城市街景"
+python3 scripts/draw_image.py --model gpt-image-2.5-sunburst --count 3 --size 16:9 "雨夜里的未来城市街景"
 ```
 
 Use a reference image for image editing:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model <selected-model> --reference /path/to/reference.png "把参考图改成水彩插画风格"
+python3 scripts/draw_image.py --model <selected-model> --reference /path/to/reference.png "把参考图改成水彩插画风格"
 ```
 
 Use a mask for local edits:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model <selected-model> --reference /path/to/source.png --mask /path/to/mask.png "只修改透明蒙版区域"
+python3 scripts/draw_image.py --model <selected-model> --reference /path/to/source.png --mask /path/to/mask.png "只修改透明蒙版区域"
 ```
 
 Interactive mode:
 
 ```bash
-python3 ~/.codex/skills/canvas-draw-image/scripts/draw_image.py --model <selected-model>
+python3 scripts/draw_image.py --model <selected-model>
 ```
 
 ## Output
